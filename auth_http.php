@@ -36,7 +36,7 @@ $books = [
     1 => [
         'titulo' => 'Homodeus',
         'id_author' => '1',
-        'id_genere' => ''
+        'id_genere' => '0'
     ],
     2 => [
         'titulo' => 'Sapiens',
@@ -81,13 +81,27 @@ if(isset($_GET['resource_id'])){
 switch ( strtoupper( $_SERVER['REQUEST_METHOD'] )) {
     case 'GET':
         if (empty($resource_id)){
-            echo json_encode($books); 
-        }else{
-            if(array_key_exists($resource_id, $books)){
+            switch ($resourceType){
+                case 'books':
+                    echo json_encode($books);
+                    break;
+                case 'authors':
+                    echo json_encode($authors);
+                    break;
+                case 'generes':
+                    echo json_encode($generes);
+                    break;
+                }
+        }else{        
+            if($resourceType == "books" && array_key_exists($resource_id, $books)){
                 echo json_encode($books[$resource_id]);
+            }elseif($resourceType == "authors" &&array_key_exists($resource_id, $authors)){
+                echo json_encode($authors[$resource_id]);
+            }elseif($resourceType == "generes" && array_key_exists($resource_id, $generes)){
+                echo json_encode($generes[$resource_id]);
             }
+
         }
-        
         //echo "im in get";
         break;
     case 'POST':
